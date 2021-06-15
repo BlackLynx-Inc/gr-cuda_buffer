@@ -26,7 +26,7 @@ FIND_LIBRARY(
           /usr/lib64
           )
 
-include("${CMAKE_CURRENT_LIST_DIR}/cuda_bufferTarget.cmake")
+#include("${CMAKE_CURRENT_LIST_DIR}/cuda_bufferTarget.cmake")
 
 INCLUDE(FindPackageHandleStandardArgs)
 FIND_PACKAGE_HANDLE_STANDARD_ARGS(CUDA_BUFFER DEFAULT_MSG CUDA_BUFFER_LIBRARIES CUDA_BUFFER_INCLUDE_DIRS)
