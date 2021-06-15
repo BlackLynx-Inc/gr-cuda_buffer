@@ -1,0 +1,422 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="classgr_1_1cuda__buffer" kind="class" language="C++" prot="public">
+    <compoundname>gr::cuda_buffer</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">buffer_single_mapped</basecompoundref>
+    <includes refid="cuda__buffer_8h" local="no">cuda_buffer.h</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classgr_1_1cuda__buffer_1afb575e62b42c2b3a903638143f7df7ec" prot="private" static="no" mutable="no">
+        <type>char *</type>
+        <definition>char* gr::cuda_buffer::d_cuda_buf</definition>
+        <argsstring></argsstring>
+        <name>d_cuda_buf</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/blnxuser/gnuradio/gr-cuda_buffer/include/cuda_buffer/cuda_buffer.h" line="100" column="10" bodyfile="/home/blnxuser/gnuradio/gr-cuda_buffer/include/cuda_buffer/cuda_buffer.h" bodystart="100" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="classgr_1_1cuda__buffer_1a7202bfb6de675363fe11a3ee9a6fd40b" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void *</type>
+        <definition>static void* gr::cuda_buffer::cuda_memcpy</definition>
+        <argsstring>(void *dest, const void *src, std::size_t count)</argsstring>
+        <name>cuda_memcpy</name>
+        <param>
+          <type>void *</type>
+          <declname>dest</declname>
+        </param>
+        <param>
+          <type>const void *</type>
+          <declname>src</declname>
+        </param>
+        <param>
+          <type>std::size_t</type>
+          <declname>count</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/blnxuser/gnuradio/gr-cuda_buffer/include/cuda_buffer/cuda_buffer.h" line="37" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="classgr_1_1cuda__buffer_1aaad6abe9cf1c08c23fb8d863c3e6fff5" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void *</type>
+        <definition>static void* gr::cuda_buffer::cuda_memmove</definition>
+        <argsstring>(void *dest, const void *src, std::size_t count)</argsstring>
+        <name>cuda_memmove</name>
+        <param>
+          <type>void *</type>
+          <declname>dest</declname>
+        </param>
+        <param>
+          <type>const void *</type>
+          <declname>src</declname>
+        </param>
+        <param>
+          <type>std::size_t</type>
+          <declname>count</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/blnxuser/gnuradio/gr-cuda_buffer/include/cuda_buffer/cuda_buffer.h" line="38" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="classgr_1_1cuda__buffer_1ac052cdd7c54e152c58858896b6c7e6d9" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>buffer_sptr</type>
+        <definition>static buffer_sptr gr::cuda_buffer::make_cuda_buffer</definition>
+        <argsstring>(int nitems, size_t sizeof_item, uint64_t downstream_lcm_nitems, block_sptr link, block_sptr buf_owner)</argsstring>
+        <name>make_cuda_buffer</name>
+        <param>
+          <type>int</type>
+          <declname>nitems</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>sizeof_item</declname>
+        </param>
+        <param>
+          <type>uint64_t</type>
+          <declname>downstream_lcm_nitems</declname>
+        </param>
+        <param>
+          <type>block_sptr</type>
+          <declname>link</declname>
+        </param>
+        <param>
+          <type>block_sptr</type>
+          <declname>buf_owner</declname>
+        </param>
+        <briefdescription>
+<para>Creates a new <ref refid="classgr_1_1cuda__buffer" kindref="compound">cuda_buffer</ref> object. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>nitems</parametername>
+</parameternamelist>
+<parameterdescription>
+<para></para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>sizeof_item</parametername>
+</parameternamelist>
+<parameterdescription>
+<para></para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>downstream_lcm_nitems</parametername>
+</parameternamelist>
+<parameterdescription>
+<para></para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>link</parametername>
+</parameternamelist>
+<parameterdescription>
+<para></para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>buf_owner</parametername>
+</parameternamelist>
+<parameterdescription>
+<para></para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>pointer to buffer base class </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/blnxuser/gnuradio/gr-cuda_buffer/include/cuda_buffer/cuda_buffer.h" line="93" column="24"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="classgr_1_1cuda__buffer_1a8c4fb57cb30f2cf97ee68082c947eed0" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type></type>
+        <definition>virtual gr::cuda_buffer::~cuda_buffer</definition>
+        <argsstring>()</argsstring>
+        <name>~cuda_buffer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/blnxuser/gnuradio/gr-cuda_buffer/include/cuda_buffer/cuda_buffer.h" line="40" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="classgr_1_1cuda__buffer_1af522807f2c8452167d49ff5ff8685072" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>virtual void gr::cuda_buffer::post_work</definition>
+        <argsstring>(int nitems)</argsstring>
+        <name>post_work</name>
+        <param>
+          <type>int</type>
+          <declname>nitems</declname>
+        </param>
+        <briefdescription>
+<para>Handle post-general_work() cleanup and data transfer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Called directly after call to general_work() completes and is used for data transfer (and perhaps other administrative activities)</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>nitems</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>is the number of items produced by the general_work() function. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/blnxuser/gnuradio/gr-cuda_buffer/include/cuda_buffer/cuda_buffer.h" line="51" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="classgr_1_1cuda__buffer_1a193c9b64f8206c5f4f190087fbd20206" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool gr::cuda_buffer::do_allocate_buffer</definition>
+        <argsstring>(size_t final_nitems, size_t sizeof_item)</argsstring>
+        <name>do_allocate_buffer</name>
+        <param>
+          <type>size_t</type>
+          <declname>final_nitems</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>sizeof_item</declname>
+        </param>
+        <briefdescription>
+<para>Do actual buffer allocation. Inherited from buffer_single_mapped. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/blnxuser/gnuradio/gr-cuda_buffer/include/cuda_buffer/cuda_buffer.h" line="56" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classgr_1_1cuda__buffer_1ac2364832efd929a9c93604eda91fd6d3" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void *</type>
+        <definition>virtual void* gr::cuda_buffer::write_pointer</definition>
+        <argsstring>()</argsstring>
+        <name>write_pointer</name>
+        <briefdescription>
+<para>Return a pointer to the write buffer depending on the context. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/blnxuser/gnuradio/gr-cuda_buffer/include/cuda_buffer/cuda_buffer.h" line="61" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="classgr_1_1cuda__buffer_1acf69218b7c848feb36697e852e920402" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>const void *</type>
+        <definition>virtual const void* gr::cuda_buffer::_read_pointer</definition>
+        <argsstring>(unsigned int read_index)</argsstring>
+        <name>_read_pointer</name>
+        <param>
+          <type>unsigned int</type>
+          <declname>read_index</declname>
+        </param>
+        <briefdescription>
+<para>return pointer to read buffer depending on the context </para>
+        </briefdescription>
+        <detaileddescription>
+<para>The return value points to at least items_available() items. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/blnxuser/gnuradio/gr-cuda_buffer/include/cuda_buffer/cuda_buffer.h" line="68" column="24"/>
+      </memberdef>
+      <memberdef kind="function" id="classgr_1_1cuda__buffer_1ad02a24c2099c53a8a0058fa2c5dc481d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool gr::cuda_buffer::input_blocked_callback</definition>
+        <argsstring>(int items_required, int items_avail, unsigned read_index)</argsstring>
+        <name>input_blocked_callback</name>
+        <param>
+          <type>int</type>
+          <declname>items_required</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>items_avail</declname>
+        </param>
+        <param>
+          <type>unsigned</type>
+          <declname>read_index</declname>
+        </param>
+        <briefdescription>
+<para>Callback function that the scheduler will call when it determines that the input is blocked. Override this function if needed. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/blnxuser/gnuradio/gr-cuda_buffer/include/cuda_buffer/cuda_buffer.h" line="74" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="classgr_1_1cuda__buffer_1a83ec1fdead12ccd9930fcd70bc384fd6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool gr::cuda_buffer::output_blocked_callback</definition>
+        <argsstring>(int output_multiple, bool force)</argsstring>
+        <name>output_blocked_callback</name>
+        <param>
+          <type>int</type>
+          <declname>output_multiple</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>force</declname>
+        </param>
+        <briefdescription>
+<para>Callback function that the scheduler will call when it determines that the output is blocked. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/blnxuser/gnuradio/gr-cuda_buffer/include/cuda_buffer/cuda_buffer.h" line="80" column="10"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="classgr_1_1cuda__buffer_1a1069b5fecea0cd2c5c16ce4a388a4112" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>gr::cuda_buffer::cuda_buffer</definition>
+        <argsstring>(int nitems, size_t sizeof_item, uint64_t downstream_lcm_nitems, block_sptr link, block_sptr buf_owner)</argsstring>
+        <name>cuda_buffer</name>
+        <param>
+          <type>int</type>
+          <declname>nitems</declname>
+        </param>
+        <param>
+          <type>size_t</type>
+          <declname>sizeof_item</declname>
+        </param>
+        <param>
+          <type>uint64_t</type>
+          <declname>downstream_lcm_nitems</declname>
+        </param>
+        <param>
+          <type>block_sptr</type>
+          <declname>link</declname>
+        </param>
+        <param>
+          <type>block_sptr</type>
+          <declname>buf_owner</declname>
+        </param>
+        <briefdescription>
+<para>constructor is private. Use gr_make_buffer to create instances. </para>
+        </briefdescription>
+        <detaileddescription>
+<para>Allocate a buffer that holds at least <computeroutput>nitems</computeroutput> of size <computeroutput>sizeof_item</computeroutput>.</para>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>nitems</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>is the minimum number of items the buffer will hold. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>sizeof_item</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>is the size of an item in bytes. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>downstream_lcm_nitems</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>is the least common multiple of the items to read by downstream blocks </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>link</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>is the block that writes to this buffer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>buf_owner</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>if the block that owns the buffer which may or may not be the same as the block that writes to this buffer</para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+The total size of the buffer will be rounded up to a system dependent boundary. This is typically the system page size, but under MS windows is 64KB. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/blnxuser/gnuradio/gr-cuda_buffer/include/cuda_buffer/cuda_buffer.h" line="119" column="5"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Subclass of buffer_single_mapped for supporting blocks using NVidia&apos;s CUDA runtime. </para>
+    </briefdescription>
+    <detaileddescription>
+<para>This buffer_single_mapped subclass is designed to provide easy buffer support for blocks using NVidia&apos;s CUDA runtime. The class acts as a wrapper for two underlying buffers, a host buffer allocated using the cudaMallocHost() function and a device buffer allocated using the cudaMalloc() function. The logic contained within this class manages both buffers and the movement of data between the two depending on the buffer&apos;s assigned context. </para>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>buffer_single_mapped</label>
+      </node>
+      <node id="1">
+        <label>gr::cuda_buffer</label>
+        <link refid="classgr_1_1cuda__buffer"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>buffer_single_mapped</label>
+      </node>
+      <node id="1">
+        <label>gr::cuda_buffer</label>
+        <link refid="classgr_1_1cuda__buffer"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="/home/blnxuser/gnuradio/gr-cuda_buffer/include/cuda_buffer/cuda_buffer.h" line="35" column="1" bodyfile="/home/blnxuser/gnuradio/gr-cuda_buffer/include/cuda_buffer/cuda_buffer.h" bodystart="34" bodyend="124"/>
+    <listofallmembers>
+      <member refid="classgr_1_1cuda__buffer_1acf69218b7c848feb36697e852e920402" prot="public" virt="virtual"><scope>gr::cuda_buffer</scope><name>_read_pointer</name></member>
+      <member refid="classgr_1_1cuda__buffer_1a1069b5fecea0cd2c5c16ce4a388a4112" prot="private" virt="non-virtual"><scope>gr::cuda_buffer</scope><name>cuda_buffer</name></member>
+      <member refid="classgr_1_1cuda__buffer_1a7202bfb6de675363fe11a3ee9a6fd40b" prot="public" virt="non-virtual"><scope>gr::cuda_buffer</scope><name>cuda_memcpy</name></member>
+      <member refid="classgr_1_1cuda__buffer_1aaad6abe9cf1c08c23fb8d863c3e6fff5" prot="public" virt="non-virtual"><scope>gr::cuda_buffer</scope><name>cuda_memmove</name></member>
+      <member refid="classgr_1_1cuda__buffer_1afb575e62b42c2b3a903638143f7df7ec" prot="private" virt="non-virtual"><scope>gr::cuda_buffer</scope><name>d_cuda_buf</name></member>
+      <member refid="classgr_1_1cuda__buffer_1a193c9b64f8206c5f4f190087fbd20206" prot="public" virt="non-virtual"><scope>gr::cuda_buffer</scope><name>do_allocate_buffer</name></member>
+      <member refid="classgr_1_1cuda__buffer_1ad02a24c2099c53a8a0058fa2c5dc481d" prot="public" virt="non-virtual"><scope>gr::cuda_buffer</scope><name>input_blocked_callback</name></member>
+      <member refid="classgr_1_1cuda__buffer_1ac052cdd7c54e152c58858896b6c7e6d9" prot="public" virt="non-virtual"><scope>gr::cuda_buffer</scope><name>make_cuda_buffer</name></member>
+      <member refid="classgr_1_1cuda__buffer_1a83ec1fdead12ccd9930fcd70bc384fd6" prot="public" virt="non-virtual"><scope>gr::cuda_buffer</scope><name>output_blocked_callback</name></member>
+      <member refid="classgr_1_1cuda__buffer_1af522807f2c8452167d49ff5ff8685072" prot="public" virt="virtual"><scope>gr::cuda_buffer</scope><name>post_work</name></member>
+      <member refid="classgr_1_1cuda__buffer_1ac2364832efd929a9c93604eda91fd6d3" prot="public" virt="virtual"><scope>gr::cuda_buffer</scope><name>write_pointer</name></member>
+      <member refid="classgr_1_1cuda__buffer_1a8c4fb57cb30f2cf97ee68082c947eed0" prot="public" virt="virtual"><scope>gr::cuda_buffer</scope><name>~cuda_buffer</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

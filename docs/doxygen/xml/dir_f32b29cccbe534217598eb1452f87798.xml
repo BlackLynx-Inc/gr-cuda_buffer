@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="dir_f32b29cccbe534217598eb1452f87798" kind="dir">
+    <compoundname>cuda_buffer</compoundname>
+    <innerfile refid="api_8h">api.h</innerfile>
+    <innerfile refid="cuda__buffer_8h">cuda_buffer.h</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/blnxuser/gnuradio/gr-cuda_buffer/include/cuda_buffer/"/>
+  </compounddef>
+</doxygen>
