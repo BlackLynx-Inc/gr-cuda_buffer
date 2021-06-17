@@ -17,6 +17,8 @@
 
 namespace gr {
 
+buffer_type cuda_buffer::type(buftype_DEFAULT_CUDA{});
+
 void* cuda_buffer::cuda_memcpy(void* dest, const void* src, std::size_t count)
 {
     cudaError_t rc = cudaSuccess;

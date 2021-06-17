@@ -37,6 +37,8 @@ public:
     static void* cuda_memcpy(void* dest, const void* src, std::size_t count);
     static void* cuda_memmove(void* dest, const void* src, std::size_t count);
 
+    static buffer_type type;
+
     virtual ~cuda_buffer();
 
     /*!
