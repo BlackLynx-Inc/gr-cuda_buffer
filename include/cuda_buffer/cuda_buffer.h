@@ -95,6 +95,7 @@ public:
     static buffer_sptr make_cuda_buffer(int nitems,
                                         size_t sizeof_item,
                                         uint64_t downstream_lcm_nitems,
+                                        uint32_t downstream_max_out_mult,
                                         block_sptr link,
                                         block_sptr buf_owner);
 
@@ -110,6 +111,8 @@ private:
      * \param sizeof_item is the size of an item in bytes.
      * \param downstream_lcm_nitems is the least common multiple of the items to
      *                              read by downstream blocks
+     * \param downstream_max_out_mult is the maximum output multiple of all 
+     *                                downstream blocks
      * \param link is the block that writes to this buffer.
      * \param buf_owner if the block that owns the buffer which may or may not
      *                  be the same as the block that writes to this buffer
@@ -121,6 +124,7 @@ private:
     cuda_buffer(int nitems,
                 size_t sizeof_item,
                 uint64_t downstream_lcm_nitems,
+                uint32_t downstream_max_out_mult,
                 block_sptr link,
                 block_sptr buf_owner);
 };
