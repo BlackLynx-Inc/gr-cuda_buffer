@@ -34,8 +34,10 @@ namespace gr {
 class GR_RUNTIME_API cuda_buffer : public buffer_single_mapped
 {
 public:
-    static void* cuda_memcpy(void* dest, const void* src, std::size_t count);
-    static void* cuda_memmove(void* dest, const void* src, std::size_t count);
+    mem_func_t f_cuda_memcpy;
+    mem_func_t f_cuda_memmove;
+    void* cuda_memcpy(void* dest, const void* src, std::size_t count);
+    void* cuda_memmove(void* dest, const void* src, std::size_t count);
 
     static buffer_type type;
 
@@ -100,6 +102,7 @@ public:
                                         block_sptr buf_owner);
 
 private:
+    cudaStream_t d_stream;
     char* d_cuda_buf; // CUDA buffer
 
     /*!

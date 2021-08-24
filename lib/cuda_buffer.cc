@@ -15,6 +15,7 @@
 #include <sstream>
 #include <stdexcept>
 
+#define STREAM_COPY 0
 
 namespace gr {
 
@@ -23,14 +24,19 @@ buffer_type cuda_buffer::type(buftype_DEFAULT_CUDA{});
 void* cuda_buffer::cuda_memcpy(void* dest, const void* src, std::size_t count)
 {
     cudaError_t rc = cudaSuccess;
+    #if STREAM_COPY
+    rc = cudaMemcpyAsync(dest, src, count, cudaMemcpyDeviceToDevice, d_stream);
+    cudaStreamSynchronize(d_stream);
+    #else
     rc = cudaMemcpy(dest, src, count, cudaMemcpyDeviceToDevice);
+    #endif
     if (rc) {
         std::ostringstream msg;
         msg << "Error performing cudaMemcpy: " << cudaGetErrorName(rc) << " -- "
             << cudaGetErrorString(rc);
         throw std::runtime_error(msg.str());
     }
-
+    
     return dest;
 }
 
@@ -51,7 +57,12 @@ void* cuda_buffer::cuda_memmove(void* dest, const void* src, std::size_t count)
     }
 
     // First copy data from source to temp buffer
+    #if STREAM_COPY
+    rc = cudaMemcpyAsync(tempBuffer, src, count, cudaMemcpyDeviceToDevice, d_stream);
+    #else
     rc = cudaMemcpy(tempBuffer, src, count, cudaMemcpyDeviceToDevice);
+    #endif
+    
     if (rc) {
         std::ostringstream msg;
         msg << "Error performing cudaMemcpy: " << cudaGetErrorName(rc) << " -- "
@@ -60,13 +71,22 @@ void* cuda_buffer::cuda_memmove(void* dest, const void* src, std::size_t count)
     }
 
     // Then copy data from temp buffer to destination to avoid overlap
+    #if STREAM_COPY
+    rc = cudaMemcpyAsync(dest, tempBuffer, count, cudaMemcpyDeviceToDevice, d_stream);
+    #else
     rc = cudaMemcpy(dest, tempBuffer, count, cudaMemcpyDeviceToDevice);
+    #endif
+    
+    
     if (rc) {
         std::ostringstream msg;
         msg << "Error performing cudaMemcpy: " << cudaGetErrorName(rc) << " -- "
             << cudaGetErrorString(rc);
         throw std::runtime_error(msg.str());
     }
+    #if STREAM_COPY
+    cudaStreamSynchronize(d_stream);
+    #endif
 
     cudaFree(tempBuffer);
 
@@ -86,6 +106,10 @@ cuda_buffer::cuda_buffer(int nitems,
     gr::configure_default_loggers(d_logger, d_debug_logger, "cuda_buffer");
     if (!allocate_buffer(nitems))
         throw std::bad_alloc();
+    
+    f_cuda_memcpy = [this](void* dest, const void* src, std::size_t count){ return this->cuda_memcpy(dest, src, count); };
+    f_cuda_memmove = [this](void* dest, const void* src, std::size_t count){ return this->cuda_memmove(dest, src, count); };
+    cudaStreamCreate(&d_stream);
 }
 
 cuda_buffer::~cuda_buffer()
@@ -124,8 +148,14 @@ void cuda_buffer::post_work(int nitems)
     case buffer_context::HOST_TO_DEVICE: {
         // Copy data from host buffer to device buffer
         void* dest_ptr = &d_cuda_buf[d_write_index * d_sizeof_item];
+        #if STREAM_COPY
+        rc = cudaMemcpyAsync(
+            dest_ptr, write_pointer(), nitems * d_sizeof_item, cudaMemcpyHostToDevice, d_stream);
+        cudaStreamSynchronize(d_stream);
+        #else
         rc = cudaMemcpy(
             dest_ptr, write_pointer(), nitems * d_sizeof_item, cudaMemcpyHostToDevice);
+        #endif
         if (rc) {
             std::ostringstream msg;
             msg << "Error performing cudaMemcpy: " << cudaGetErrorName(rc) << " -- "
@@ -133,13 +163,20 @@ void cuda_buffer::post_work(int nitems)
             GR_LOG_ERROR(d_logger, msg.str());
             throw std::runtime_error(msg.str());
         }
+        
     } break;
 
     case buffer_context::DEVICE_TO_HOST: {
         // Copy data from device buffer to host buffer
         void* dest_ptr = &d_base[d_write_index * d_sizeof_item];
+        #if STREAM_COPY
+        rc = cudaMemcpyAsync(
+            dest_ptr, write_pointer(), nitems * d_sizeof_item, cudaMemcpyDeviceToHost, d_stream);
+        cudaStreamSynchronize(d_stream);
+        #else
         rc = cudaMemcpy(
             dest_ptr, write_pointer(), nitems * d_sizeof_item, cudaMemcpyDeviceToHost);
+        #endif
         if (rc) {
             std::ostringstream msg;
             msg << "Error performing cudaMemcpy: " << cudaGetErrorName(rc) << " -- "
@@ -147,6 +184,7 @@ void cuda_buffer::post_work(int nitems)
             GR_LOG_ERROR(d_logger, msg.str());
             throw std::runtime_error(msg.str());
         }
+        
     } break;
 
     case buffer_context::DEVICE_TO_DEVICE:
@@ -265,13 +303,15 @@ bool cuda_buffer::input_blocked_callback(int items_required,
     switch (d_context) {
     case buffer_context::HOST_TO_DEVICE:
     case buffer_context::DEVICE_TO_DEVICE:
+
+
         // Adjust "device" buffer
         rc = input_blocked_callback_logic(items_required,
                                           items_avail,
                                           read_index,
                                           d_cuda_buf,
-                                          cuda_buffer::cuda_memcpy,
-                                          cuda_buffer::cuda_memmove);
+                                          f_cuda_memcpy,
+                                          f_cuda_memmove);
         break;
 
     case buffer_context::DEVICE_TO_HOST:
@@ -310,7 +350,7 @@ bool cuda_buffer::output_blocked_callback(int output_multiple, bool force)
     case buffer_context::DEVICE_TO_DEVICE:
         // Adjust "device" buffer
         rc = output_blocked_callback_logic(
-            output_multiple, force, d_cuda_buf, cuda_buffer::cuda_memmove);
+            output_multiple, force, d_cuda_buf, f_cuda_memmove );
         break;
 
     default:
