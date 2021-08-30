@@ -15,7 +15,7 @@
 #include <sstream>
 #include <stdexcept>
 
-#define STREAM_COPY 0
+#define STREAM_COPY 1   // enabled by default
 
 namespace gr {
 
@@ -24,12 +24,12 @@ buffer_type cuda_buffer::type(buftype_DEFAULT_CUDA{});
 void* cuda_buffer::cuda_memcpy(void* dest, const void* src, std::size_t count)
 {
     cudaError_t rc = cudaSuccess;
-    #if STREAM_COPY
+#if STREAM_COPY
     rc = cudaMemcpyAsync(dest, src, count, cudaMemcpyDeviceToDevice, d_stream);
     cudaStreamSynchronize(d_stream);
-    #else
+#else
     rc = cudaMemcpy(dest, src, count, cudaMemcpyDeviceToDevice);
-    #endif
+#endif
     if (rc) {
         std::ostringstream msg;
         msg << "Error performing cudaMemcpy: " << cudaGetErrorName(rc) << " -- "
@@ -57,11 +57,11 @@ void* cuda_buffer::cuda_memmove(void* dest, const void* src, std::size_t count)
     }
 
     // First copy data from source to temp buffer
-    #if STREAM_COPY
+#if STREAM_COPY
     rc = cudaMemcpyAsync(tempBuffer, src, count, cudaMemcpyDeviceToDevice, d_stream);
-    #else
+#else
     rc = cudaMemcpy(tempBuffer, src, count, cudaMemcpyDeviceToDevice);
-    #endif
+#endif
     
     if (rc) {
         std::ostringstream msg;
@@ -71,12 +71,11 @@ void* cuda_buffer::cuda_memmove(void* dest, const void* src, std::size_t count)
     }
 
     // Then copy data from temp buffer to destination to avoid overlap
-    #if STREAM_COPY
+#if STREAM_COPY
     rc = cudaMemcpyAsync(dest, tempBuffer, count, cudaMemcpyDeviceToDevice, d_stream);
-    #else
+#else
     rc = cudaMemcpy(dest, tempBuffer, count, cudaMemcpyDeviceToDevice);
-    #endif
-    
+#endif
     
     if (rc) {
         std::ostringstream msg;
@@ -84,9 +83,9 @@ void* cuda_buffer::cuda_memmove(void* dest, const void* src, std::size_t count)
             << cudaGetErrorString(rc);
         throw std::runtime_error(msg.str());
     }
-    #if STREAM_COPY
+#if STREAM_COPY
     cudaStreamSynchronize(d_stream);
-    #endif
+#endif
 
     cudaFree(tempBuffer);
 
@@ -303,8 +302,6 @@ bool cuda_buffer::input_blocked_callback(int items_required,
     switch (d_context) {
     case buffer_context::HOST_TO_DEVICE:
     case buffer_context::DEVICE_TO_DEVICE:
-
-
         // Adjust "device" buffer
         rc = input_blocked_callback_logic(items_required,
                                           items_avail,
