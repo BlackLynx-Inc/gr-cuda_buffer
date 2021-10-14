@@ -135,7 +135,7 @@ private:
 // see buffer_type.h for details on this macro
 // here we're using the macro to generate compile-time
 // class declarations
-MAKE_CUSTOM_BUFFER_TYPE(DEFAULT_CUDA, &cuda_buffer::make_cuda_buffer)
+DEFINE_CUSTOM_BUFFER_TYPE(DEFAULT_CUDA, &cuda_buffer::make_cuda_buffer)
 
 } /* namespace gr */
 

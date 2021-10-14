@@ -131,7 +131,7 @@ void cuda_buffer::post_work(int nitems)
 #ifdef BUFFER_DEBUG
     std::ostringstream msg;
     msg << "[" << this << "] "
-        << "cuda_buffer [" << d_context << "] -- post_work: " << nitems;
+        << "cuda_buffer [" << d_transfer_type << "] -- post_work: " << nitems;
     GR_LOG_DEBUG(d_logger, msg.str());
 #endif
 
@@ -143,8 +143,8 @@ void cuda_buffer::post_work(int nitems)
 
     // NOTE: when this function is called the write pointer has not yet been
     // advanced so it can be used directly as the source ptr
-    switch (d_context) {
-    case buffer_context::HOST_TO_DEVICE: {
+    switch (d_transfer_type) {
+    case transfer_type::HOST_TO_DEVICE: {
         // Copy data from host buffer to device buffer
         void* dest_ptr = &d_cuda_buf[d_write_index * d_sizeof_item];
         #if STREAM_COPY
@@ -165,7 +165,7 @@ void cuda_buffer::post_work(int nitems)
         
     } break;
 
-    case buffer_context::DEVICE_TO_HOST: {
+    case transfer_type::DEVICE_TO_HOST: {
         // Copy data from device buffer to host buffer
         void* dest_ptr = &d_base[d_write_index * d_sizeof_item];
         #if STREAM_COPY
@@ -186,13 +186,13 @@ void cuda_buffer::post_work(int nitems)
         
     } break;
 
-    case buffer_context::DEVICE_TO_DEVICE:
+    case transfer_type::DEVICE_TO_DEVICE:
         // No op FTW!
         break;
 
     default:
         std::ostringstream msg;
-        msg << "Unexpected context for cuda_buffer: " << d_context;
+        msg << "Unexpected context for cuda_buffer: " << d_transfer_type;
         GR_LOG_ERROR(d_logger, msg.str());
         throw std::runtime_error(msg.str());
     }
@@ -240,21 +240,21 @@ bool cuda_buffer::do_allocate_buffer(size_t final_nitems, size_t sizeof_item)
 void* cuda_buffer::write_pointer()
 {
     void* ptr = nullptr;
-    switch (d_context) {
-    case buffer_context::HOST_TO_DEVICE:
+    switch (d_transfer_type) {
+    case transfer_type::HOST_TO_DEVICE:
         // Write into host buffer
         ptr = &d_base[d_write_index * d_sizeof_item];
         break;
 
-    case buffer_context::DEVICE_TO_HOST:
-    case buffer_context::DEVICE_TO_DEVICE:
+    case transfer_type::DEVICE_TO_HOST:
+    case transfer_type::DEVICE_TO_DEVICE:
         // Write into CUDA device buffer
         ptr = &d_cuda_buf[d_write_index * d_sizeof_item];
         break;
 
     default:
         std::ostringstream msg;
-        msg << "Unexpected context for cuda_buffer: " << d_context;
+        msg << "Unexpected context for cuda_buffer: " << d_transfer_type;
         GR_LOG_ERROR(d_logger, msg.str());
         throw std::runtime_error(msg.str());
     }
@@ -265,21 +265,21 @@ void* cuda_buffer::write_pointer()
 const void* cuda_buffer::_read_pointer(unsigned int read_index)
 {
     void* ptr = nullptr;
-    switch (d_context) {
-    case buffer_context::HOST_TO_DEVICE:
-    case buffer_context::DEVICE_TO_DEVICE:
+    switch (d_transfer_type) {
+    case transfer_type::HOST_TO_DEVICE:
+    case transfer_type::DEVICE_TO_DEVICE:
         // Read from "device" buffer
         ptr = &d_cuda_buf[read_index * d_sizeof_item];
         break;
 
-    case buffer_context::DEVICE_TO_HOST:
+    case transfer_type::DEVICE_TO_HOST:
         // Read from host buffer
         ptr = &d_base[read_index * d_sizeof_item];
         break;
 
     default:
         std::ostringstream msg;
-        msg << "Unexpected context for cuda_buffer: " << d_context;
+        msg << "Unexpected context for cuda_buffer: " << d_transfer_type;
         GR_LOG_ERROR(d_logger, msg.str());
         throw std::runtime_error(msg.str());
     }
@@ -294,14 +294,14 @@ bool cuda_buffer::input_blocked_callback(int items_required,
 #ifdef BUFFER_DEBUG
     std::ostringstream msg;
     msg << "[" << this << "] "
-        << "cuda_buffer [" << d_context << "] -- input_blocked_callback";
+        << "cuda_buffer [" << d_transfer_type << "] -- input_blocked_callback";
     GR_LOG_DEBUG(d_logger, msg.str());
 #endif
 
     bool rc = false;
-    switch (d_context) {
-    case buffer_context::HOST_TO_DEVICE:
-    case buffer_context::DEVICE_TO_DEVICE:
+    switch (d_transfer_type) {
+    case transfer_type::HOST_TO_DEVICE:
+    case transfer_type::DEVICE_TO_DEVICE:
         // Adjust "device" buffer
         rc = input_blocked_callback_logic(items_required,
                                           items_avail,
@@ -311,7 +311,7 @@ bool cuda_buffer::input_blocked_callback(int items_required,
                                           f_cuda_memmove);
         break;
 
-    case buffer_context::DEVICE_TO_HOST:
+    case transfer_type::DEVICE_TO_HOST:
         // Adjust host buffer
         rc = input_blocked_callback_logic(
             items_required, items_avail, read_index, d_base, std::memcpy, std::memmove);
@@ -319,7 +319,7 @@ bool cuda_buffer::input_blocked_callback(int items_required,
 
     default:
         std::ostringstream msg;
-        msg << "Unexpected context for cuda_buffer: " << d_context;
+        msg << "Unexpected context for cuda_buffer: " << d_transfer_type;
         GR_LOG_ERROR(d_logger, msg.str());
         throw std::runtime_error(msg.str());
     }
@@ -332,19 +332,19 @@ bool cuda_buffer::output_blocked_callback(int output_multiple, bool force)
 #ifdef BUFFER_DEBUG
     std::ostringstream msg;
     msg << "[" << this << "] "
-        << "host_buffer [" << d_context << "] -- output_blocked_callback";
+        << "host_buffer [" << d_transfer_type << "] -- output_blocked_callback";
     GR_LOG_DEBUG(d_logger, msg.str());
 #endif
 
     bool rc = false;
-    switch (d_context) {
-    case buffer_context::HOST_TO_DEVICE:
+    switch (d_transfer_type) {
+    case transfer_type::HOST_TO_DEVICE:
         // Adjust host buffer
         rc = output_blocked_callback_logic(output_multiple, force, d_base, std::memmove);
         break;
 
-    case buffer_context::DEVICE_TO_HOST:
-    case buffer_context::DEVICE_TO_DEVICE:
+    case transfer_type::DEVICE_TO_HOST:
+    case transfer_type::DEVICE_TO_DEVICE:
         // Adjust "device" buffer
         rc = output_blocked_callback_logic(
             output_multiple, force, d_cuda_buf, f_cuda_memmove );
@@ -352,7 +352,7 @@ bool cuda_buffer::output_blocked_callback(int output_multiple, bool force)
 
     default:
         std::ostringstream msg;
-        msg << "Unexpected context for cuda_buffer: " << d_context;
+        msg << "Unexpected context for cuda_buffer: " << d_transfer_type;
         GR_LOG_ERROR(d_logger, msg.str());
         throw std::runtime_error(msg.str());
     }
